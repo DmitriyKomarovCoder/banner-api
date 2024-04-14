@@ -1,5 +1,5 @@
 http:
-  host: 127.0.0.1
+  host: banner-api
   port: 8080
   readTimeout: 5s
   writeTimeout: 10s
@@ -11,7 +11,7 @@ postgres:
   pool_max: 2
 
 redis:
-  host: 127.0.0.1:6379
+  host: redis:6379
   db: 0
 
 shutdown_timeout: 5s

@@ -3,10 +3,6 @@
 ```bash
 make run
 ```
-## Проверить покрытие
-```bash
-make cover
-```
-## Для того, чтобы использовать api:
-- необходимо проставить cookie: "role": "admin" (всем функционалом)
-- cookie: "role":"user" - только get методы# banner-api
+
+## Ссылка на Postman
+https://api.postman.com/collections/30670861-0fa231e9-901b-42ba-9c8d-a88b8e01e405?access_key=PMAT-01HVF2KAH5RW4BM9NCPQKSDJJ9

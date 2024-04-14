@@ -1,0 +1,65 @@
+version: '3.8'
+
+networks:
+  net:
+    driver: bridge
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./build/sql/:/docker-entrypoint-initdb.d/
+    ports:
+      - "${DB_PORT}:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: always
+    networks:
+    - net
+
+  redis:
+      container_name: redis
+      image: redis:latest
+      env_file:
+        - .env
+      ports:
+        - "${REDIS_PORT}:6379"
+      healthcheck:
+        test: [ "CMD", "redis-cli", "ping" ]
+        interval: 10s
+        timeout: 2s
+        retries: 3
+      networks:
+        - net
+      restart: always
+    
+  # golang-app:
+  #   container_name: golang-app
+  #   build:
+  #     dockerfile: build/Dockerfile
+  #   restart: always
+  #   depends_on:
+  #     postgres: 
+  #       condition: service_healthy
+  #   ports:
+  #     - "8080:8080"
+  #     - "8081:8081"
+  #   volumes:
+  #     - .env:/api/.env
+  #     - ./config/config.yaml:/api/config.yaml
+  #     - type: bind
+  #       source: ${PWD}/server.log
+  #       target: /api/server.log
+  #   networks:
+  #     - net
